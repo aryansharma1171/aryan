@@ -75,11 +75,48 @@
 
         /* --- Header / Hero Section --- */
         header {
-            padding: 4rem 2rem;
+            padding: 6rem 2rem 4rem 2rem; /* Increased top padding for top-bar */
             text-align: center;
             background: var(--header-bg);
             border-bottom: 1px solid var(--border-color);
             transition: background 0.3s ease, border-color 0.3s ease;
+            position: relative;
+        }
+
+        /* --- Top Bar / Owner Branding --- */
+        .top-bar {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .owner-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .owner-logo:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-color);
+        }
+
+        .owner-brand-text {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--text-primary);
+            background: var(--h1-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .brand-badge {
@@ -93,6 +130,24 @@
             margin-bottom: 1.5rem;
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
+        }
+
+        /* --- Etho AI Logo --- */
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.5rem auto;
+            display: block;
+            box-shadow: 0 0 20px var(--accent-glow);
+            border: 2px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .hero-logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--accent-glow);
         }
 
         h1 {
@@ -137,39 +192,6 @@
         .social-links a:hover, .theme-toggle:hover {
             color: var(--accent-color);
             transform: scale(1.1);
-        }
-
-        /* --- Live Status Indicator --- */
-        .system-status {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            margin-top: 2rem;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: border-color 0.3s ease;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background-color: #22c55e;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #22c55e;
-            animation: pulse-green 1.5s infinite;
-        }
-
-        @keyframes pulse-green {
-            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
         }
 
         /* --- Main Content Container --- */
@@ -508,6 +530,24 @@
         }
 
         @media (max-width: 768px) {
+            header {
+                padding: 5.5rem 1.5rem 3rem 1.5rem;
+            }
+            .top-bar {
+                top: 1rem;
+                left: 1rem;
+            }
+            .owner-logo {
+                width: 40px;
+                height: 40px;
+            }
+            .owner-brand-text {
+                font-size: 1rem;
+            }
+            .hero-logo {
+                width: 90px;
+                height: 90px;
+            }
             h1 { font-size: 2.5rem; }
             .grid { grid-template-columns: 1fr; }
             .section-header { margin-bottom: 2rem; }
@@ -518,22 +558,23 @@
 <body>
 
     <header class="fade-in">
+        <div class="top-bar">
+            <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/A.S%20Main%20Logo.png" alt="A.S Owner Logo" class="owner-logo" loading="lazy">
+            <span class="owner-brand-text">A.S World</span>
+        </div>
+
         <div class="brand-badge">A.S PORTFOLIO</div>
+        
+        <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/Etho%20ai%20logo.webp" alt="Etho AI Logo" class="hero-logo" loading="lazy">
+        
         <h1>Software for Everyone. <span class="author-tag">by Aryan Sharma</span></h1>
         
         <div class="social-links">
             <a href="https://github.com/aryansharma1171" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
             <a href="mailto:etho98g@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-            <!-- Theme Toggle Button -->
             <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Light/Dark Mode">
                 <i class="fas fa-sun"></i>
             </button>
-        </div>
-
-        <!-- Live Status Indicator -->
-        <div class="system-status fade-in">
-            <span class="status-dot"></span>
-            <span class="status-text">All Systems Online</span>
         </div>
     </header>
 
@@ -544,13 +585,11 @@
                 <i class="fas fa-code"></i> &nbsp; My Applications
             </div>
 
-            <!-- Search Feature -->
             <div class="search-wrapper">
                 <input type="text" id="app-search" class="search-input" placeholder="Search applications..." autocomplete="off">
                 <i class="fas fa-search search-icon"></i>
             </div>
 
-            <!-- Category Filters -->
             <div class="category-filters" id="category-filters">
                 <button class="filter-btn active" data-filter="all">All</button>
                 <button class="filter-btn" data-filter="ai">AI</button>
@@ -561,7 +600,6 @@
             </div>
         </div>
         
-        <!-- Empty State Message -->
         <div id="no-results" class="no-results-message">
             <i class="fas fa-box-open" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i><br>
             No matching applications found.
@@ -635,7 +673,6 @@
                 </a>
             </div>
 
-            <!-- Maintenance Mode Card -->
             <div class="card" data-category="tools">
                 <div class="maintenance-badge">
                     <i class="fas fa-wrench"></i> Maintenance
@@ -751,7 +788,6 @@
         </p>
     </footer>
 
-    <!-- Floating Refresh Button -->
     <button id="refresh-btn" class="floating-refresh" aria-label="Refresh Page" title="Refresh Page">
         <i class="fas fa-sync-alt"></i>
     </button>
