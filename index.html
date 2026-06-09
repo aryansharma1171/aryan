@@ -3,64 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A.S | Free Software Portfolio</title>
+    <title>A.S | Premium Software Portfolio</title>
     
-    <meta name="theme-color" content="#121212">
+    <meta name="theme-color" content="#050505">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1006/1006771.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <style>
         :root {
-            /* Default Dark Mode Variables */
-            --bg-color: #121212; 
-            --card-bg: #1e1e1e;
-            --text-primary: #f8fafc;
+            /* Futuristic Dark Theme (Apple / Tesla vibe) */
+            --bg-color: #050505; 
+            --text-primary: #ffffff;
             --text-secondary: #94a3b8;
-            --accent-color: #cbd5e1; 
-            --accent-glow: rgba(203, 213, 225, 0.3);
-            --gradient-primary: linear-gradient(135deg, #475569 0%, #1e293b 100%);
+            --accent-color: #06b6d4; /* Cyan accent */
+            --accent-glow: rgba(6, 182, 212, 0.4);
+            --gradient-primary: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
             
-            /* Structural colors that change with theme */
-            --header-bg: radial-gradient(circle at top, #262626 0%, #121212 70%);
-            --footer-bg: #0a0a0a;
-            --border-color: rgba(255, 255, 255, 0.05);
-            --border-hover: #475569;
-            --h1-gradient: linear-gradient(to right, #fff, #64748b);
-            --card-h3-color: #fff;
-            --badge-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(15, 15, 20, 0.5);
+            --glass-card: rgba(20, 20, 25, 0.6);
+            --card-hover: rgba(30, 30, 40, 0.8);
             --icon-bg: rgba(255, 255, 255, 0.05);
-            --glass-bg: rgba(30, 30, 30, 0.7);
+            --badge-bg: rgba(6, 182, 212, 0.1);
         }
 
-        /* Light Mode Variables */
         body.light-mode {
-            --bg-color: #f1f5f9; 
-            --card-bg: #ffffff;
+            /* Clean Light Theme */
+            --bg-color: #f8fafc; 
             --text-primary: #0f172a;
             --text-secondary: #475569;
-            --accent-color: #334155; 
-            --accent-glow: rgba(51, 65, 85, 0.2);
-            --gradient-primary: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            --accent-color: #0284c7; 
+            --accent-glow: rgba(2, 132, 199, 0.3);
+            --gradient-primary: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
             
-            --header-bg: radial-gradient(circle at top, #ffffff 0%, #f1f5f9 70%);
-            --footer-bg: #e2e8f0;
             --border-color: rgba(0, 0, 0, 0.1);
-            --border-hover: #94a3b8;
-            --h1-gradient: linear-gradient(to right, #0f172a, #475569);
-            --card-h3-color: #0f172a;
-            --badge-bg: rgba(0, 0, 0, 0.05);
-            --icon-bg: rgba(0, 0, 0, 0.05);
             --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-card: rgba(255, 255, 255, 0.8);
+            --card-hover: rgba(240, 244, 248, 0.9);
+            --icon-bg: rgba(0, 0, 0, 0.04);
+            --badge-bg: rgba(2, 132, 199, 0.1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -68,822 +57,665 @@
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
-            -webkit-user-select: none;
-            user-select: none;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.5s ease;
         }
 
-        /* --- Header / Hero Section --- */
-        header {
-            padding: 6rem 2rem 4rem 2rem; /* Increased top padding for top-bar */
-            text-align: center;
-            background: var(--header-bg);
-            border-bottom: 1px solid var(--border-color);
-            transition: background 0.3s ease, border-color 0.3s ease;
-            position: relative;
+        /* --- Loading Screen --- */
+        #loader {
+            position: fixed; inset: 0; background: var(--bg-color);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 99999; transition: opacity 0.8s ease, visibility 0.8s;
+        }
+        .loader-logo {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 3px solid transparent; border-top-color: var(--accent-color);
+            animation: spinLoader 1s linear infinite;
+        }
+        @keyframes spinLoader { to { transform: rotate(360deg); } }
+
+        /* --- Custom Cursor Fixed --- */
+        @media (min-width: 1024px) {
+            /* Normal cursor is kept visible now */
+            .cursor-dot, .cursor-outline { display: block; }
+        }
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; border-radius: 50%;
+            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none;
+        }
+        .cursor-dot { width: 6px; height: 6px; background: var(--accent-color); }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 2px solid var(--accent-color);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+        .cursor-outline.hover {
+            width: 60px; height: 60px; background: var(--accent-glow); border-color: transparent;
         }
 
-        /* --- Top Bar / Owner Branding --- */
-        .top-bar {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 10;
+        /* --- Three.js Background --- */
+        #canvas-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; pointer-events: none; opacity: 0.6;
         }
 
-        .owner-logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+        /* --- Global UI Elements --- */
+        .glass-panel {
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color); border-radius: 24px;
         }
-
-        .owner-logo:hover {
-            transform: scale(1.1);
-            border-color: var(--accent-color);
-        }
-
-        .owner-brand-text {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            color: var(--text-primary);
-            background: var(--h1-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .brand-badge {
-            display: inline-block;
-            background: var(--badge-bg);
-            color: var(--accent-color);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        /* --- Etho AI Logo --- */
-        .hero-logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 1.5rem auto;
-            display: block;
-            box-shadow: 0 0 20px var(--accent-glow);
-            border: 2px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-
-        .hero-logo:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px var(--accent-glow);
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -1px;
-            background: var(--h1-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transition: background 0.3s ease;
-        }
-
-        .author-tag {
-            display: block;
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-top: 0.5rem;
-            font-weight: 400;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            margin-top: 1.5rem;
-        }
-
-        .social-links a, .theme-toggle {
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            transition: color 0.3s, transform 0.3s;
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .social-links a:hover, .theme-toggle:hover {
-            color: var(--accent-color);
-            transform: scale(1.1);
-        }
-
-        /* --- Main Content Container --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
-
-        .section-header {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 2.5rem;
-            gap: 20px;
-        }
-
+        
+        .container { max-width: 1250px; margin: 0 auto; padding: 0 2rem; }
+        
+        section { padding: 6rem 0; position: relative; }
+        
         .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 2.5rem; font-weight: 800; text-align: center; margin-bottom: 3rem;
+            background: linear-gradient(to right, var(--text-primary), var(--accent-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .section-title::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-            transition: background 0.3s ease;
-        }
+        /* --- Scroll Reveal --- */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* --- Search Feature --- */
-        .search-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
+        /* --- Top Navigation --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 1.5rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; backdrop-filter: blur(10px);
+            border-bottom: 1px solid transparent; transition: all 0.3s;
         }
+        nav.scrolled { background: var(--glass-bg); border-bottom: 1px solid var(--border-color); }
+        
+        .brand { display: flex; align-items: center; gap: 15px; font-weight: 800; font-size: 1.2rem; }
+        .brand img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent-color); }
+        
+        .nav-controls { display: flex; gap: 20px; align-items: center; }
+        .nav-btn { background: none; border: none; color: var(--text-primary); font-size: 1.5rem; transition: 0.3s; }
+        .nav-btn:hover { color: var(--accent-color); transform: scale(1.1); }
 
+        /* --- Modern Hero Section --- */
+        .hero-section {
+            min-height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding-top: 5rem;
+        }
+        .hero-logo-3d {
+            width: 160px; height: 160px; border-radius: 50%; object-fit: cover;
+            box-shadow: 0 0 50px var(--accent-glow); margin-bottom: 2rem;
+            animation: float 6s ease-in-out infinite, rotate3d 10s linear infinite;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        
+        .hero-title { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 900; line-height: 1.1; letter-spacing: -2px; }
+        .hero-subtitle { font-size: 1.8rem; color: var(--text-secondary); margin: 1rem 0 2rem; height: 40px; }
+        .typed-cursor { font-weight: 300; color: var(--accent-color); animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .stats-container { display: flex; gap: 3rem; margin-top: 3rem; flex-wrap: wrap; justify-content: center; }
+        .stat-box { text-align: center; padding: 1.5rem 2.5rem; }
+        .stat-num { font-size: 2.5rem; font-weight: 900; color: var(--accent-color); }
+        .stat-label { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- About & Skills Section --- */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .intro-card { padding: 3rem; font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary); }
+        .intro-card p { margin-bottom: 1.5rem; }
+        .intro-card span { color: var(--text-primary); font-weight: 600; }
+        
+        .skills-container { display: flex; flex-direction: column; gap: 1.5rem; }
+        .skill-item { width: 100%; }
+        .skill-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-weight: 600; }
+        .progress-bar { width: 100%; height: 8px; background: var(--icon-bg); border-radius: 10px; overflow: hidden; }
+        .progress { height: 100%; background: var(--gradient-primary); width: 0; transition: width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); border-radius: 10px;}
+
+        /* --- Portfolio System --- */
+        .search-wrapper { max-width: 600px; margin: 0 auto 2rem; position: relative; }
         .search-input {
-            width: 100%;
-            padding: 1rem 1.5rem 1rem 3.5rem;
-            font-size: 1rem;
-            font-family: inherit;
-            color: var(--text-primary);
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            outline: none;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
+            width: 100%; padding: 1.2rem 2rem 1.2rem 3.5rem; font-size: 1.1rem;
+            background: var(--glass-bg); border: 1px solid var(--border-color); color: var(--text-primary);
+            border-radius: 50px; outline: none; transition: 0.3s;
         }
+        .search-input:focus { border-color: var(--accent-color); box-shadow: 0 0 25px var(--accent-glow); }
+        .search-icon { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
 
-        .search-input::placeholder {
-            color: var(--text-secondary);
-        }
-
-        .search-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-glow);
-            background: var(--card-bg);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 1.4rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            pointer-events: none;
-            transition: color 0.3s ease;
-        }
-
-        .search-input:focus + .search-icon {
-            color: var(--accent-color);
-        }
-
-        /* --- Category Filters --- */
-        .category-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-
+        .category-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 3rem; }
         .filter-btn {
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            font-weight: 600;
-            font-family: inherit;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: var(--glass-bg); border: 1px solid var(--border-color); color: var(--text-secondary);
+            padding: 0.7rem 1.5rem; border-radius: 50px; cursor: pointer; transition: 0.3s; font-weight: 600;
         }
+        .filter-btn:hover, .filter-btn.active { background: var(--gradient-primary); color: #fff; border-color: transparent; }
 
-        .filter-btn:hover {
-            color: var(--text-primary);
-            border-color: var(--accent-color);
-        }
+        #no-results { display: none; text-align: center; padding: 3rem; color: var(--text-secondary); font-size: 1.2rem; }
 
-        .filter-btn.active {
-            background: var(--gradient-primary);
-            color: white;
-            border-color: transparent;
-            box-shadow: 0 4px 15px var(--accent-glow);
+        /* Premium 3D Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; perspective: 1500px; }
+        
+        .card-spotlight { position: relative; border-radius: 24px; padding: 1px; background: var(--border-color); transition: transform 0.4s ease; transform-style: preserve-3d; }
+        .card-spotlight::before {
+            content: ""; position: absolute; inset: 0; border-radius: 24px; opacity: 0; transition: opacity 0.3s;
+            background: radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), var(--accent-glow), transparent 40%);
         }
-
-        .no-results-message {
-            display: none;
-            text-align: center;
-            padding: 3rem 1rem;
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            background: var(--badge-bg);
-            border: 1px dashed var(--border-color);
-            border-radius: 16px;
-            margin-top: 1rem;
-        }
-
-        /* --- Project Grid & Cards --- */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
+        .card-spotlight:hover::before { opacity: 1; }
 
         .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            will-change: transform, opacity; 
+            background: var(--glass-card); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 23px; padding: 2rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; z-index: 1; overflow: hidden;
         }
+        
+        .card-content { transform: translateZ(30px); transition: transform 0.3s; display: flex; flex-direction: column; height: 100%; justify-content: space-between; pointer-events: none;}
+        .card-content * { pointer-events: auto; }
+        
+        .card-icon { width: 55px; height: 55px; background: var(--icon-bg); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--accent-color); margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.05); }
+        .card h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.8rem; }
+        .card p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem; flex-grow: 1; }
+        
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.8rem 1.5rem; background: var(--gradient-primary); color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 0.95rem; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .btn:hover { transform: scale(1.02); box-shadow: 0 10px 25px var(--accent-glow); }
+        .btn.disabled { background: var(--icon-bg); color: var(--text-secondary); box-shadow: none; border-style: dashed; cursor: not-allowed; }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.2);
-            border-color: var(--border-hover);
+        .maintenance-badge { position: absolute; top: 15px; right: 15px; background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        /* --- Contact Section --- */
+        .contact-box { text-align: center; padding: 4rem 2rem; margin: 0 auto; max-width: 600px; }
+        .contact-box h3 { font-size: 2rem; margin-bottom: 1rem; }
+        .contact-box p { color: var(--text-secondary); margin-bottom: 2rem; }
+        .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 1rem 2.5rem; background: var(--text-primary); color: var(--bg-color); font-weight: 800; font-size: 1.1rem; border-radius: 50px; text-decoration: none; transition: 0.3s; }
+        .contact-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(255,255,255,0.2); }
+
+        /* --- Footer & Floating Actions --- */
+        footer { text-align: center; padding: 3rem; border-top: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem; }
+        
+        .floating-refresh { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--glass-bg); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 1.4rem; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1000; transition: 0.3s; cursor: pointer; }
+        .floating-refresh:hover { background: var(--accent-color); color: white; border-color: var(--accent-color); transform: rotate(180deg); }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .card-spotlight { transform-style: flat; transform: none !important; }
+            .card-content { transform: none !important; }
+            .card-spotlight::before { display: none; }
         }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--icon-bg);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            color: var(--card-h3-color);
-            transition: color 0.3s ease;
-        }
-
-        .card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-            transition: color 0.3s ease;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem 1.5rem;
-            background: var(--gradient-primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            width: 100%;
-            border: 1px solid var(--border-color);
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-            box-shadow: 0 0 20px var(--accent-glow); 
-            transform: scale(1.02);
-        }
-
-        .btn i {
-            margin-left: 8px;
-        }
-
-        /* --- Maintenance State Styles --- */
-        .btn.disabled {
-            background: var(--badge-bg);
-            color: var(--text-secondary);
-            border: 1px dashed var(--border-color);
-            cursor: not-allowed;
-            pointer-events: none;
-            box-shadow: none;
-        }
-
-        .maintenance-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(239, 68, 68, 0.1); 
-            color: #ef4444; 
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            padding: 0.3rem 0.8rem;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            z-index: 10;
-        }
-
-        /* --- Floating Refresh Button --- */
-        .floating-refresh {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .floating-refresh:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 25px var(--accent-glow);
-            transform: translateY(-3px);
-            color: var(--accent-color);
-        }
-
-        .floating-refresh.rotating i {
-            animation: spin 0.6s ease-in-out;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* --- Footer --- */
-        footer {
-            background: var(--footer-bg);
-            padding: 3rem 2rem;
-            text-align: center;
-            border-top: 1px solid var(--border-color);
-            margin-top: 4rem;
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-
-        .contact-box {
-            background: var(--badge-bg);
-            display: inline-block;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .contact-box a {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .footer-note {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        /* --- Animations --- */
-        .fade-in {
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card.fade-in-filter {
-            animation: fadeInScale 0.3s ease-out forwards;
-        }
-
-        .card.fade-out-filter {
-            animation: fadeOutScale 0.3s ease-in forwards;
-        }
-
-        @keyframes fadeInScale {
-            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        @keyframes fadeOutScale {
-            0% { opacity: 1; transform: scale(1) translateY(0); }
-            100% { opacity: 0; transform: scale(0.95) translateY(10px); }
-        }
-
         @media (max-width: 768px) {
-            header {
-                padding: 5.5rem 1.5rem 3rem 1.5rem;
-            }
-            .top-bar {
-                top: 1rem;
-                left: 1rem;
-            }
-            .owner-logo {
-                width: 40px;
-                height: 40px;
-            }
-            .owner-brand-text {
-                font-size: 1rem;
-            }
-            .hero-logo {
-                width: 90px;
-                height: 90px;
-            }
-            h1 { font-size: 2.5rem; }
-            .grid { grid-template-columns: 1fr; }
-            .section-header { margin-bottom: 2rem; }
-            .floating-refresh { bottom: 20px; right: 20px; width: 45px; height: 45px; font-size: 1.1rem; }
+            .hero-title { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1.3rem; }
+            .stats-container { gap: 1.5rem; }
+            .stat-box { padding: 1rem; }
+            .section-title { font-size: 2rem; }
+            .floating-refresh { width: 50px; height: 50px; font-size: 1.1rem; bottom: 20px; right: 20px; }
+            .nav-controls { gap: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <header class="fade-in">
-        <div class="top-bar">
-            <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/A.S%20Main%20Logo.png" alt="A.S Owner Logo" class="owner-logo" loading="lazy">
-            <span class="owner-brand-text">A.S World</span>
-        </div>
+    <div id="loader">
+        <div class="loader-logo"></div>
+    </div>
 
-        <div class="brand-badge">A.S PORTFOLIO</div>
-        
-        <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/Etho%20ai%20logo.webp" alt="Etho AI Logo" class="hero-logo" loading="lazy">
-        
-        <h1>Software for Everyone. <span class="author-tag">by Aryan Sharma</span></h1>
-        
-        <div class="social-links">
-            <a href="https://github.com/aryansharma1171" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-            <a href="mailto:etho98g@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Light/Dark Mode">
-                <i class="fas fa-sun"></i>
-            </button>
-        </div>
-    </header>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
-    <div class="container fade-in">
+    <div id="canvas-container"></div>
+
+    <nav id="navbar">
+        <div class="brand">
+            <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/A.S%20Main%20Logo.png" alt="A.S Logo" loading="lazy">
+            A.S World
+        </div>
+        <div class="nav-controls">
+            <a href="https://github.com/aryansharma1171" target="_blank" class="nav-btn hover-target" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <button id="theme-toggle" class="nav-btn hover-target" aria-label="Toggle Theme"><i class="fas fa-sun"></i></button>
+        </div>
+    </nav>
+
+    <section class="hero-section container">
+        <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/Etho%20ai%20logo.webp" alt="Etho AI" class="hero-logo-3d reveal">
+        <h1 class="hero-title reveal" style="transition-delay: 0.1s;">Aryan Sharma</h1>
+        <h2 class="hero-subtitle reveal" style="transition-delay: 0.2s;">
+            <span id="typed-text"></span><span class="typed-cursor">|</span>
+        </h2>
         
-        <div class="section-header">
-            <div class="section-title">
-                <i class="fas fa-code"></i> &nbsp; My Applications
+        <div class="stats-container reveal" style="transition-delay: 0.3s;">
+            <div class="stat-box glass-panel">
+                <div class="stat-num" data-target="15">0</div>
+                <div class="stat-label">Web Tools</div>
             </div>
-
-            <div class="search-wrapper">
-                <input type="text" id="app-search" class="search-input" placeholder="Search applications..." autocomplete="off">
-                <i class="fas fa-search search-icon"></i>
+            <div class="stat-box glass-panel">
+                <div class="stat-num" data-target="50">0</div>
+                <div class="stat-label">Projects Built</div>
             </div>
-
-            <div class="category-filters" id="category-filters">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="ai">AI</button>
-                <button class="filter-btn" data-filter="education">Education</button>
-                <button class="filter-btn" data-filter="productivity">Productivity</button>
-                <button class="filter-btn" data-filter="utilities">Utilities</button>
-                <button class="filter-btn" data-filter="tools">Tools</button>
+            <div class="stat-box glass-panel">
+                <div class="stat-num" data-target="100">0</div>
+                <div class="stat-label">% Passion</div>
             </div>
+        </div>
+    </section>
+
+    <section id="about" class="container">
+        <h2 class="section-title reveal">Engineer Inside Out</h2>
+        <div class="about-grid">
+            <div class="intro-card glass-panel reveal">
+                <p>Hello! I am <span>Aryan Sharma</span>, a passionate self-taught developer and the creator of A.S World.</p>
+                <p>I specialize in building intuitive, high-performance web applications, utilities, and custom AI interfaces designed to solve real-world problems. My goal is to make powerful software accessible to everyone for free.</p>
+                <p>Whether it's optimizing complex datasets or designing seamless mobile layouts, I bridge the gap between aesthetics and flawless functionality.</p>
+            </div>
+            <div class="skills-container reveal" style="transition-delay: 0.2s;">
+                <div class="skill-item">
+                    <div class="skill-info"><span>Frontend (HTML, CSS, JS)</span><span>95%</span></div>
+                    <div class="progress-bar"><div class="progress" data-width="95%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info"><span>UI/UX Design</span><span>85%</span></div>
+                    <div class="progress-bar"><div class="progress" data-width="85%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info"><span>AI Integration</span><span>90%</span></div>
+                    <div class="progress-bar"><div class="progress" data-width="90%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info"><span>Backend/Databases (PHP, SQL)</span><span>80%</span></div>
+                    <div class="progress-bar"><div class="progress" data-width="80%"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="container">
+        <h2 class="section-title reveal">Featured Innovations</h2>
+        
+        <div class="search-wrapper reveal">
+            <input type="text" id="app-search" class="search-input hover-target" placeholder="Search AI, Tools, Utilities..." autocomplete="off">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <div class="category-filters reveal" id="category-filters">
+            <button class="filter-btn active hover-target" data-filter="all">All Ecosystem</button>
+            <button class="filter-btn hover-target" data-filter="ai">AI</button>
+            <button class="filter-btn hover-target" data-filter="education">Education</button>
+            <button class="filter-btn hover-target" data-filter="productivity">Productivity</button>
+            <button class="filter-btn hover-target" data-filter="utilities">Utilities</button>
+            <button class="filter-btn hover-target" data-filter="tools">Tools</button>
         </div>
         
-        <div id="no-results" class="no-results-message">
-            <i class="fas fa-box-open" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i><br>
-            No matching applications found.
-        </div>
+        <div id="no-results">No systems match your criteria. Redefine parameters.</div>
 
         <div class="grid" id="portfolio-grid">
             
-            <div class="card" data-category="ai">
-                <div>
-                    <div class="card-icon"><i class="fas fa-brain"></i></div>
-                    <h3>Arya AI</h3>
-                    <p>Experience the next generation of artificial intelligence designed by A.S.</p>
+            <div class="card-spotlight reveal" data-category="ai">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-brain"></i></div>
+                            <h3>Arya AI</h3>
+                            <p>Experience the next generation of artificial intelligence designed by A.S.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/arya-ai/" target="_blank" class="btn hover-target">Launch AI <i class="fas fa-rocket"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/arya-ai/" target="_blank" class="btn">
-                    Launch AI <i class="fas fa-rocket"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="utilities productivity tools">
-                <div>
-                    <div class="card-icon"><i class="fas fa-file-excel"></i></div>
-                    <h3>Image to Excel</h3>
-                    <p>Convert images containing tables into editable Excel spreadsheets effortlessly.</p>
+            <div class="card-spotlight reveal" data-category="utilities productivity tools">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-file-excel"></i></div>
+                            <h3>Image to Excel</h3>
+                            <p>Convert images containing tables into editable Excel spreadsheets effortlessly.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/img-to-excel/" target="_blank" class="btn hover-target">Convert Image <i class="fas fa-table"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/img-to-excel/" target="_blank" class="btn">
-                    Convert Image <i class="fas fa-table"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="ai tools">
-                <div>
-                    <div class="card-icon"><i class="fas fa-robot"></i></div>
-                    <h3>Etho</h3>
-                    <p>Advanced Free AI software designed to assist with various tasks intelligently.</p>
+            <div class="card-spotlight reveal" data-category="ai tools">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-robot"></i></div>
+                            <h3>Etho</h3>
+                            <p>Advanced Free AI software designed to assist with various tasks intelligently.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/Etho-by-A.S/" target="_blank" class="btn hover-target">Launch App <i class="fas fa-external-link-alt"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/Etho-by-A.S/" target="_blank" class="btn">
-                    Launch App <i class="fas fa-external-link-alt"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="education">
-                <div>
-                    <div class="card-icon"><i class="fas fa-landmark"></i></div>
-                    <h3>Class 12 PolSci Test</h3>
-                    <p>Practice and test your knowledge for Class 12 Political Science exams.</p>
+            <div class="card-spotlight reveal" data-category="education">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-landmark"></i></div>
+                            <h3>Class 12 PolSci Test</h3>
+                            <p>Practice and test your knowledge for Class 12 Political Science exams.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/12-polsci-test-app/" target="_blank" class="btn hover-target">Take Test <i class="fas fa-arrow-right"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/12-polsci-test-app/" target="_blank" class="btn">
-                    Take Test <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="education">
-                <div>
-                    <div class="card-icon"><i class="fas fa-clipboard-question"></i></div>
-                    <h3>Class 12 CS Test</h3>
-                    <p>Practice and test your knowledge for Class 12 Computer Science exams.</p>
+            <div class="card-spotlight reveal" data-category="education">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-clipboard-question"></i></div>
+                            <h3>Class 12 CS Test</h3>
+                            <p>Practice and test your knowledge for Class 12 Computer Science exams.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/12-cs-test-app/" target="_blank" class="btn hover-target">Take Test <i class="fas fa-arrow-right"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/12-cs-test-app/" target="_blank" class="btn">
-                    Take Test <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="utilities productivity tools">
-                <div>
-                    <div class="card-icon"><i class="fas fa-file-pdf"></i></div>
-                    <h3>Text to PDF</h3>
-                    <p>A simple utility to convert plain text into downloadable PDF documents.</p>
+            <div class="card-spotlight reveal" data-category="utilities productivity tools">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-file-pdf"></i></div>
+                            <h3>Text to PDF</h3>
+                            <p>A simple utility to convert plain text into downloadable PDF documents.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/Text-to-pdf-by-a.s/" target="_blank" class="btn hover-target">Convert Now <i class="fas fa-arrow-right"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/Text-to-pdf-by-a.s/" target="_blank" class="btn">
-                    Convert Now <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="tools">
-                <div class="maintenance-badge">
-                    <i class="fas fa-wrench"></i> Maintenance
+            <div class="card-spotlight reveal" data-category="tools">
+                <div class="card">
+                    <div class="maintenance-badge"><i class="fas fa-wrench"></i> Maintenance</div>
+                    <div class="card-content">
+                        <div style="opacity: 0.6;">
+                            <div class="card-icon"><i class="fas fa-comments"></i></div>
+                            <h3>A.S Chat World</h3>
+                            <p>Connect with others using this custom-built chat software solution. (Currently offline).</p>
+                        </div>
+                        <a href="#" class="btn disabled hover-target" tabindex="-1">Offline <i class="fas fa-ban"></i></a>
+                    </div>
                 </div>
-                <div style="opacity: 0.6;">
-                    <div class="card-icon"><i class="fas fa-comments"></i></div>
-                    <h3>A.S Chat World</h3>
-                    <p>Connect with others using this custom-built chat software solution. (Currently offline for upgrades).</p>
-                </div>
-                <a href="#" class="btn disabled" tabindex="-1">
-                    Currently Offline <i class="fas fa-tools"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="tools education productivity">
-                <div>
-                    <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
-                    <h3>A.S Code Editor</h3>
-                    <p>Write, edit, and test code directly in your browser with this online IDE.</p>
+            <div class="card-spotlight reveal" data-category="tools education productivity">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
+                            <h3>A.S Code Editor</h3>
+                            <p>Write, edit, and test code directly in your browser with this online IDE.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/a.s-code-editor/" target="_blank" class="btn hover-target">Write Code <i class="fas fa-code"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/a.s-code-editor/" target="_blank" class="btn">
-                    Write Code <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="utilities tools">
-                <div>
-                    <div class="card-icon"><i class="fas fa-qrcode"></i></div>
-                    <h3>A.S QR Scanner</h3>
-                    <p>Scan QR codes directly from your browser using your device camera.</p>
+            <div class="card-spotlight reveal" data-category="utilities tools">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-qrcode"></i></div>
+                            <h3>A.S QR Scanner</h3>
+                            <p>Scan QR codes directly from your browser using your device camera.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/A.S-Q.R-Scanner/" target="_blank" class="btn hover-target">Scan QR <i class="fas fa-camera"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/A.S-Q.R-Scanner/" target="_blank" class="btn">
-                    Scan QR <i class="fas fa-camera"></i>
-                </a>
             </div>
 
-             <div class="card" data-category="utilities tools productivity">
-                <div>
-                    <div class="card-icon"><i class="fas fa-folder-open"></i></div>
-                    <h3>A.S File Manager</h3>
-                    <p>Manage your local files effectively with this web-based file explorer.</p>
+            <div class="card-spotlight reveal" data-category="utilities tools productivity">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-folder-open"></i></div>
+                            <h3>A.S File Manager</h3>
+                            <p>Manage your local files effectively with this web-based file explorer.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/etho-file-manager/" target="_blank" class="btn hover-target">Manage Files <i class="fas fa-folder"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/etho-file-manager/" target="_blank" class="btn">
-                    Manage Files <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="utilities tools">
-                <div>
-                    <div class="card-icon"><i class="fas fa-barcode"></i></div>
-                    <h3>Text to QR</h3>
-                    <p>Generate QR codes from text instantly.</p>
+            <div class="card-spotlight reveal" data-category="utilities tools">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-barcode"></i></div>
+                            <h3>Text to QR</h3>
+                            <p>Generate QR codes from text instantly.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/Text-to-QR-/" target="_blank" class="btn hover-target">Generate QR <i class="fas fa-arrow-right"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/Text-to-QR-/" target="_blank" class="btn">
-                    Generate QR <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="productivity tools">
-                <div>
-                    <div class="card-icon"><i class="fas fa-wallet"></i></div>
-                    <h3>Expense Maker</h3>
-                    <p>Easily track and manage your daily expenses and finances with this intuitive tool.</p>
+            <div class="card-spotlight reveal" data-category="productivity tools">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-wallet"></i></div>
+                            <h3>Expense Maker</h3>
+                            <p>Easily track and manage your daily expenses and finances with this intuitive tool.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/Expense-maker/" target="_blank" class="btn hover-target">Launch App <i class="fas fa-chart-line"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/Expense-maker/" target="_blank" class="btn">
-                    Launch App <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="utilities productivity tools">
-                <div>
-                    <div class="card-icon"><i class="fas fa-images"></i></div>
-                    <h3>Image to PDF</h3>
-                    <p>Quickly and easily convert your image files into high-quality PDF documents.</p>
+            <div class="card-spotlight reveal" data-category="utilities productivity tools">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-images"></i></div>
+                            <h3>Image to PDF</h3>
+                            <p>Quickly and easily convert your image files into high-quality PDF documents.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/imgtopdf/" target="_blank" class="btn hover-target">Convert Now <i class="fas fa-file-pdf"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/imgtopdf/" target="_blank" class="btn">
-                    Convert Now <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="utilities tools">
-                <div>
-                    <div class="card-icon"><i class="fas fa-compress"></i></div>
-                    <h3>A.S File Resizer</h3>
-                    <p>Easily compress and resize your files to save space without losing quality.</p>
+            <div class="card-spotlight reveal" data-category="utilities tools">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-compress"></i></div>
+                            <h3>A.S File Resizer</h3>
+                            <p>Easily compress and resize your files to save space without losing quality.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/as-file-resizer/" target="_blank" class="btn hover-target">Open Resizer <i class="fas fa-compress-arrows-alt"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/as-file-resizer/" target="_blank" class="btn">
-                    Open Resizer <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <div class="card" data-category="productivity tools">
-                <div>
-                    <div class="card-icon"><i class="fas fa-file-medical"></i></div>
-                    <h3>Medicine Record Maker</h3>
-                    <p>Easily create, organize, and manage medical records with this dedicated tool.</p>
+            <div class="card-spotlight reveal" data-category="productivity tools">
+                <div class="card">
+                    <div class="card-content">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-file-medical"></i></div>
+                            <h3>Medicine Record Maker</h3>
+                            <p>Easily create, organize, and manage medical records with this dedicated tool.</p>
+                        </div>
+                        <a href="https://aryansharma1171.github.io/Medicine-record-Maker-/" target="_blank" class="btn hover-target">Open App <i class="fas fa-arrow-right"></i></a>
+                    </div>
                 </div>
-                <a href="https://aryansharma1171.github.io/Medicine-record-Maker-/" target="_blank" class="btn">
-                    Open App <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
         </div>
-    </div>
+    </section>
+
+    <section id="contact" class="container reveal">
+        <div class="contact-box glass-panel">
+            <h3>Ready to Innovate?</h3>
+            <p>Let's build the future together. Whether you need a custom tool, AI integration, or have a project in mind, my inbox is open.</p>
+            <a href="mailto:etho98g@gmail.com" class="contact-btn hover-target">
+                <i class="fas fa-paper-plane"></i> Initialize Contact
+            </a>
+        </div>
+    </section>
 
     <footer>
-        <div class="contact-box">
-            Have a request? <a href="mailto:etho98g@gmail.com">etho98g@gmail.com</a>
-        </div>
-        <p class="footer-note">
-            © 2025 A.S Software. Built by Aryan Sharma. <br>
-            More free tools coming soon. Thanks for visiting.
-        </p>
+        <p>© 2026 A.S Software Ecosystem. Engineered by Aryan Sharma.</p>
     </footer>
 
-    <button id="refresh-btn" class="floating-refresh" aria-label="Refresh Page" title="Refresh Page">
-        <i class="fas fa-sync-alt"></i>
+    <button id="refresh-btn" class="floating-refresh hover-target" aria-label="Refresh System">
+        <i class="fas fa-redo"></i>
     </button>
 
     <script>
-        // --- Service Worker Registration ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW Registered'))
-                    .catch(err => console.log('SW Failed', err));
-            });
-        }
+        // --- 1. Loader ---
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.visibility = 'hidden', 800);
+        });
 
-        // --- Theme Toggle Logic ---
+        // --- 2. Theme Engine (Preserved) ---
         const themeToggleBtn = document.getElementById('theme-toggle');
         const themeIcon = themeToggleBtn.querySelector('i');
         const themeMeta = document.querySelector('meta[name="theme-color"]');
 
-        const currentTheme = localStorage.getItem('theme');
-
-        if (currentTheme === 'light') {
+        if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-mode');
             themeIcon.classList.replace('fa-sun', 'fa-moon');
-            themeMeta.setAttribute('content', '#f1f5f9');
+            themeMeta.setAttribute('content', '#f8fafc');
         }
 
         themeToggleBtn.addEventListener('click', () => {
             document.body.classList.toggle('light-mode');
-            
             if (document.body.classList.contains('light-mode')) {
                 themeIcon.classList.replace('fa-sun', 'fa-moon');
                 localStorage.setItem('theme', 'light');
-                themeMeta.setAttribute('content', '#f1f5f9'); 
+                themeMeta.setAttribute('content', '#f8fafc');
             } else {
                 themeIcon.classList.replace('fa-moon', 'fa-sun');
                 localStorage.setItem('theme', 'dark');
-                themeMeta.setAttribute('content', '#121212');
+                themeMeta.setAttribute('content', '#050505');
             }
         });
 
-        // --- Combined Search & Category Filter Logic ---
+        // --- 3. Custom Cursor (Fixed Mouse Visibility) ---
+        if (window.innerWidth >= 1024) {
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorOutline = document.querySelector('.cursor-outline');
+            let mouseX = 0, mouseY = 0, outlineX = 0, outlineY = 0;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX; mouseY = e.clientY;
+                cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
+            });
+
+            function animateCursor() {
+                outlineX += (mouseX - outlineX) * 0.15;
+                outlineY += (mouseY - outlineY) * 0.15;
+                cursorOutline.style.transform = `translate(${outlineX}px, ${outlineY}px)`;
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            document.querySelectorAll('.hover-target, a, button, input').forEach(el => {
+                el.addEventListener('mouseenter', () => cursorOutline.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hover'));
+            });
+        }
+
+        // --- 4. Typing Animation ---
+        const typedTextSpan = document.getElementById("typed-text");
+        const textArray = ["Software Creator", "Web Developer", "AI Enthusiast"];
+        let textArrayIndex = 0; let charIndex = 0;
+
+        function type() {
+            if (charIndex < textArray[textArrayIndex].length) {
+                typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 100);
+            } else {
+                setTimeout(erase, 2000);
+            }
+        }
+        function erase() {
+            if (charIndex > 0) {
+                typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, 50);
+            } else {
+                textArrayIndex++;
+                if (textArrayIndex >= textArray.length) textArrayIndex = 0;
+                setTimeout(type, 500);
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => setTimeout(type, 1500));
+
+        // --- 5. Scroll Reveal & Counters & Progress Bars ---
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Trigger counters
+                    const counters = entry.target.querySelectorAll('.stat-num');
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const increment = target / 50;
+                        let current = 0;
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                counter.innerText = Math.ceil(current) + "+";
+                                setTimeout(updateCounter, 30);
+                            } else {
+                                counter.innerText = target + "+";
+                            }
+                        };
+                        if(counter.innerText === "0") updateCounter();
+                    });
+
+                    // Trigger Progress bars
+                    const bars = entry.target.querySelectorAll('.progress');
+                    bars.forEach(bar => {
+                        bar.style.width = bar.getAttribute('data-width');
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- 6. Navbar Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // --- 7. Portfolio Search & Filter (Preserved) ---
         const searchInput = document.getElementById('app-search');
         const filterBtns = document.querySelectorAll('.filter-btn');
-        const cards = document.querySelectorAll('.card');
+        const cards = document.querySelectorAll('.card-spotlight');
         const noResultsMessage = document.getElementById('no-results');
 
         function filterApplications() {
-            const searchQuery = searchInput.value.toLowerCase().trim();
-            const activeFilterBtn = document.querySelector('.filter-btn.active');
-            const activeCategory = activeFilterBtn ? activeFilterBtn.dataset.filter : 'all';
-            
-            let matchesFound = 0;
+            const query = searchInput.value.toLowerCase().trim();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            let found = 0;
 
-            cards.forEach(card => {
-                const appName = card.querySelector('h3').textContent.toLowerCase();
-                const cardCategories = card.dataset.category.split(' ');
+            cards.forEach(wrapper => {
+                const name = wrapper.querySelector('h3').textContent.toLowerCase();
+                const categories = wrapper.dataset.category;
                 
-                const matchesSearch = appName.includes(searchQuery);
-                const matchesCategory = activeCategory === 'all' || cardCategories.includes(activeCategory);
-                const isMatching = matchesSearch && matchesCategory;
+                const matchesSearch = name.includes(query);
+                const matchesFilter = activeFilter === 'all' || categories.includes(activeFilter);
 
-                if (isMatching) {
-                    clearTimeout(card.hideTimeout);
-                    
-                    if (card.style.display === 'none' || card.classList.contains('fade-out-filter')) {
-                        card.style.display = 'flex';
-                        card.classList.remove('fade-out-filter');
-                        void card.offsetWidth; 
-                        card.classList.add('fade-in-filter');
-                    }
-                    matchesFound++;
+                if (matchesSearch && matchesFilter) {
+                    wrapper.style.display = 'block';
+                    found++;
                 } else {
-                    if (card.style.display !== 'none' && !card.classList.contains('fade-out-filter')) {
-                        card.classList.remove('fade-in-filter');
-                        card.classList.add('fade-out-filter');
-                        
-                        card.hideTimeout = setTimeout(() => {
-                            if (!appName.includes(searchInput.value.toLowerCase().trim()) || 
-                               (activeCategory !== 'all' && !cardCategories.includes(document.querySelector('.filter-btn.active').dataset.filter))) {
-                                card.style.display = 'none';
-                            }
-                        }, 300);
-                    }
+                    wrapper.style.display = 'none';
                 }
             });
-
-            if (matchesFound === 0) {
-                noResultsMessage.style.display = 'block';
-            } else {
-                noResultsMessage.style.display = 'none';
-            }
+            noResultsMessage.style.display = found === 0 ? 'block' : 'none';
+            window.dispatchEvent(new Event('scroll'));
         }
 
         searchInput.addEventListener('input', filterApplications);
-
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 filterBtns.forEach(b => b.classList.remove('active'));
@@ -892,15 +724,103 @@
             });
         });
 
-        // --- Floating Refresh Button Logic ---
-        const refreshBtn = document.getElementById('refresh-btn');
-        refreshBtn.addEventListener('click', () => {
-            refreshBtn.classList.add('rotating');
-            setTimeout(() => {
-                window.location.reload();
-            }, 500); 
+        // --- 8. Premium 3D Tilt Effect (Desktop) ---
+        if (window.innerWidth >= 1024) {
+            document.getElementById('portfolio-grid').addEventListener('mousemove', e => {
+                for(const card of cards) {
+                    const rect = card.getBoundingClientRect();
+                    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+                }
+            });
+
+            cards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2; const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -10; 
+                    const rotateY = ((x - centerX) / centerX) * 10;
+                    
+                    card.style.transition = 'none';
+                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transition = 'transform 0.5s ease';
+                    card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+                });
+            });
+        }
+
+        // --- 9. Three.js Background ---
+        const canvasContainer = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        canvasContainer.appendChild(renderer.domElement);
+
+        const particleCount = window.innerWidth > 768 ? 2000 : 800;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+
+        for(let i = 0; i < particleCount * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 20;
+        }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.03,
+            color: 0x06b6d4,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
         });
 
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        camera.position.z = 5;
+
+        let targetRotationX = 0;
+        let targetRotationY = 0;
+
+        if (window.innerWidth >= 1024) {
+            document.addEventListener('mousemove', (e) => {
+                targetRotationX = (e.clientY / window.innerHeight - 0.5) * 0.5;
+                targetRotationY = (e.clientX / window.innerWidth - 0.5) * 0.5;
+            });
+        }
+
+        function animateThree() {
+            requestAnimationFrame(animateThree);
+            particles.rotation.y += 0.001;
+            particles.rotation.x += 0.0005;
+
+            particles.rotation.x += (targetRotationX - particles.rotation.x) * 0.05;
+            particles.rotation.y += (targetRotationY - particles.rotation.y) * 0.05;
+
+            const isLight = document.body.classList.contains('light-mode');
+            material.color.setHex(isLight ? 0x0284c7 : 0x06b6d4);
+
+            renderer.render(scene, camera);
+        }
+        animateThree();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- 10. Service Worker & Refresh (Preserved) ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+        document.getElementById('refresh-btn').addEventListener('click', () => window.location.reload());
     </script>
 </body>
 </html>
