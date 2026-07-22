@@ -3,672 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A.S | Premium Software Portfolio</title>
+    <title>Aryan Sharma | A.S Ecosystem</title>
     
-    <meta name="theme-color" content="#050505">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1006/1006771.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Premium Geometric Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <style>
         :root {
-            /* Futuristic Dark Theme (Apple / Tesla vibe) */
-            --bg-color: #050505; 
-            --text-primary: #ffffff;
-            --text-secondary: #94a3b8;
-            --accent-color: #06b6d4; /* Cyan accent */
-            --accent-glow: rgba(6, 182, 212, 0.4);
-            --gradient-primary: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
+            /* Studio Dark Mode */
+            --bg-base: #000000;
+            --bg-surface: #0a0a0a;
+            --bg-surface-hover: #141414;
             
-            --border-color: rgba(255, 255, 255, 0.08);
-            --glass-bg: rgba(15, 15, 20, 0.5);
-            --glass-card: rgba(20, 20, 25, 0.6);
-            --card-hover: rgba(30, 30, 40, 0.8);
-            --icon-bg: rgba(255, 255, 255, 0.05);
-            --badge-bg: rgba(6, 182, 212, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #8a8f98;
+            
+            --border-subtle: rgba(255, 255, 255, 0.1);
+            --border-highlight: rgba(255, 255, 255, 0.15);
+            --border-glow: rgba(59, 130, 246, 0.5);
+            
+            --accent-main: #3b82f6;
+            
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 32px;
+            --radius-pill: 999px;
+            
+            --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         body.light-mode {
-            /* Clean Light Theme */
-            --bg-color: #f8fafc; 
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --accent-color: #0284c7; 
-            --accent-glow: rgba(2, 132, 199, 0.3);
-            --gradient-primary: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+            /* Pristine Light Mode */
+            --bg-base: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-surface-hover: #f1f5f9;
             
-            --border-color: rgba(0, 0, 0, 0.1);
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-card: rgba(255, 255, 255, 0.8);
-            --card-hover: rgba(240, 244, 248, 0.9);
-            --icon-bg: rgba(0, 0, 0, 0.04);
-            --badge-bg: rgba(2, 132, 199, 0.1);
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            
+            --border-subtle: rgba(0, 0, 0, 0.08);
+            --border-highlight: rgba(0, 0, 0, 0.15);
+            --border-glow: rgba(37, 99, 235, 0.4);
+            
+            --accent-main: #2563eb;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-base);
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
-            transition: background-color 0.5s ease;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* --- Loading Screen --- */
-        #loader {
-            position: fixed; inset: 0; background: var(--bg-color);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 99999; transition: opacity 0.8s ease, visibility 0.8s;
+        /* --- Cinematic Noise Overlay --- */
+        .noise-overlay {
+            position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.04;
+            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
         }
-        .loader-logo {
-            width: 80px; height: 80px; border-radius: 50%;
-            border: 3px solid transparent; border-top-color: var(--accent-color);
-            animation: spinLoader 1s linear infinite;
-        }
-        @keyframes spinLoader { to { transform: rotate(360deg); } }
+        body.light-mode .noise-overlay { opacity: 0.02; }
 
-        /* --- Custom Cursor Fixed --- */
-        @media (min-width: 1024px) {
-            /* Normal cursor is kept visible now */
-            .cursor-dot, .cursor-outline { display: block; }
+        /* Ambient Background Glows */
+        .ambient-glow {
+            position: absolute; top: -10%; left: -10%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 60%);
+            border-radius: 50%; filter: blur(60px); z-index: -1; pointer-events: none;
         }
-        .cursor-dot, .cursor-outline {
-            position: fixed; top: 0; left: 0; border-radius: 50%;
-            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none;
-        }
-        .cursor-dot { width: 6px; height: 6px; background: var(--accent-color); }
-        .cursor-outline {
-            width: 40px; height: 40px; border: 2px solid var(--accent-color);
-            transition: width 0.2s, height 0.2s, background 0.2s;
-        }
-        .cursor-outline.hover {
-            width: 60px; height: 60px; background: var(--accent-glow); border-color: transparent;
-        }
+        .ambient-glow.right { top: 20%; left: auto; right: -20%; background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 60%); }
 
-        /* --- Three.js Background --- */
-        #canvas-container {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1; pointer-events: none; opacity: 0.6;
-        }
-
-        /* --- Global UI Elements --- */
-        .glass-panel {
-            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color); border-radius: 24px;
-        }
+        /* --- Global Layout --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+        section { padding: 6rem 0; position: relative; z-index: 1; }
         
-        .container { max-width: 1250px; margin: 0 auto; padding: 0 2rem; }
-        
-        section { padding: 6rem 0; position: relative; }
-        
-        .section-title {
-            font-size: 2.5rem; font-weight: 800; text-align: center; margin-bottom: 3rem;
-            background: linear-gradient(to right, var(--text-primary), var(--accent-color));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
 
         /* --- Scroll Reveal --- */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal { opacity: 0; transform: translateY(20px); transition: var(--transition); transition-duration: 0.7s; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* --- Top Navigation --- */
+        /* --- Smart Floating Nav --- */
         nav {
-            position: fixed; top: 0; width: 100%; padding: 1.5rem 2rem;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; backdrop-filter: blur(10px);
-            border-bottom: 1px solid transparent; transition: all 0.3s;
+            position: fixed; top: 1.5rem; left: 50%; transform: translateX(-50%);
+            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle); border-radius: var(--radius-pill);
+            padding: 0.5rem 0.5rem 0.5rem 1.5rem; display: flex; align-items: center; gap: 2rem;
+            z-index: 100; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), top 0.4s ease;
+            width: max-content; max-width: 90%;
         }
-        nav.scrolled { background: var(--glass-bg); border-bottom: 1px solid var(--border-color); }
+        body.light-mode nav { background: rgba(255, 255, 255, 0.8); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
         
-        .brand { display: flex; align-items: center; gap: 15px; font-weight: 800; font-size: 1.2rem; }
-        .brand img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent-color); }
+        /* Hide nav class for JS */
+        nav.hidden { transform: translate(-50%, -150%); }
         
-        .nav-controls { display: flex; gap: 20px; align-items: center; }
-        .nav-btn { background: none; border: none; color: var(--text-primary); font-size: 1.5rem; transition: 0.3s; }
-        .nav-btn:hover { color: var(--accent-color); transform: scale(1.1); }
-
-        /* --- Modern Hero Section --- */
-        .hero-section {
-            min-height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            padding-top: 5rem;
+        .brand { font-weight: 700; font-size: 1.1rem; letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+        .brand img { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border-subtle); object-fit: cover; }
+        
+        .nav-links { display: flex; gap: 0.2rem; }
+        .nav-btn {
+            background: transparent; border: none; color: var(--text-secondary);
+            font-size: 1.1rem; cursor: pointer; transition: var(--transition);
+            width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
         }
-        .hero-logo-3d {
-            width: 160px; height: 160px; border-radius: 50%; object-fit: cover;
-            box-shadow: 0 0 50px var(--accent-glow); margin-bottom: 2rem;
-            animation: float 6s ease-in-out infinite, rotate3d 10s linear infinite;
+        .nav-btn:hover, .nav-btn:active { color: var(--text-primary); background: var(--bg-surface-hover); }
+
+        /* --- Hero Bento Grid --- */
+        .hero-section { min-height: 90vh; display: flex; align-items: center; padding-top: 8rem; }
+        .bento-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 280px);
+            gap: 1.2rem; width: 100%;
         }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
         
-        .hero-title { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 900; line-height: 1.1; letter-spacing: -2px; }
-        .hero-subtitle { font-size: 1.8rem; color: var(--text-secondary); margin: 1rem 0 2rem; height: 40px; }
-        .typed-cursor { font-weight: 300; color: var(--accent-color); animation: blink 1s step-end infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        .stats-container { display: flex; gap: 3rem; margin-top: 3rem; flex-wrap: wrap; justify-content: center; }
-        .stat-box { text-align: center; padding: 1.5rem 2.5rem; }
-        .stat-num { font-size: 2.5rem; font-weight: 900; color: var(--accent-color); }
-        .stat-label { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
-
-        /* --- About & Skills Section --- */
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-        .intro-card { padding: 3rem; font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary); }
-        .intro-card p { margin-bottom: 1.5rem; }
-        .intro-card span { color: var(--text-primary); font-weight: 600; }
-        
-        .skills-container { display: flex; flex-direction: column; gap: 1.5rem; }
-        .skill-item { width: 100%; }
-        .skill-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-weight: 600; }
-        .progress-bar { width: 100%; height: 8px; background: var(--icon-bg); border-radius: 10px; overflow: hidden; }
-        .progress { height: 100%; background: var(--gradient-primary); width: 0; transition: width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); border-radius: 10px;}
-
-        /* --- Portfolio System --- */
-        .search-wrapper { max-width: 600px; margin: 0 auto 2rem; position: relative; }
-        .search-input {
-            width: 100%; padding: 1.2rem 2rem 1.2rem 3.5rem; font-size: 1.1rem;
-            background: var(--glass-bg); border: 1px solid var(--border-color); color: var(--text-primary);
-            border-radius: 50px; outline: none; transition: 0.3s;
+        .bento-card {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg); padding: 2.5rem; position: relative;
+            overflow: hidden; transition: var(--transition);
+            display: flex; flex-direction: column;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05); /* Inner highlight for 3D feel */
         }
-        .search-input:focus { border-color: var(--accent-color); box-shadow: 0 0 25px var(--accent-glow); }
-        .search-icon { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
+        .bento-card:hover { border-color: var(--border-highlight); transform: translateY(-4px); box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.2); }
+        body.light-mode .bento-card { box-shadow: inset 0 1px 1px rgba(255,255,255,0.8); }
+        
+        .bento-main { grid-column: span 2; grid-row: span 2; justify-content: center; background: radial-gradient(120% 100% at top left, var(--bg-surface-hover), var(--bg-surface)); }
+        .bento-visual { grid-column: span 1; grid-row: span 2; padding: 0; display: flex; align-items: center; justify-content: center; position: relative; background: #050505; }
+        body.light-mode .bento-visual { background: #f0f4f8; }
+        .bento-stats { grid-column: span 1; grid-row: span 1; justify-content: center; }
+        
+        .status-badge { 
+            display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600;
+            padding: 0.5rem 1rem; border-radius: var(--radius-pill); border: 1px solid var(--border-subtle);
+            background: rgba(255,255,255,0.02); width: max-content; margin-bottom: 2rem; backdrop-filter: blur(10px);
+        }
+        .status-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 12px #10b981; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        .category-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 3rem; }
+        .hero-title { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1rem; }
+        .hero-subtitle { font-size: clamp(1rem, 2vw, 1.15rem); color: var(--text-secondary); line-height: 1.6; max-width: 90%; }
+        
+        /* Visual Box Logo */
+        .bento-logo-glow {
+            width: clamp(100px, 30vw, 140px); height: clamp(100px, 30vw, 140px); border-radius: 50%;
+            background: url('https://raw.githubusercontent.com/aryansharma1171/webimages/main/Etho%20ai%20logo.webp') center/cover;
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); border: 1px solid rgba(255,255,255,0.1);
+            transition: var(--transition);
+        }
+        .bento-visual:hover .bento-logo-glow { transform: scale(1.05) rotate(5deg); box-shadow: 0 0 60px rgba(139, 92, 246, 0.4); }
+
+        .stat-number { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800; color: var(--text-primary); line-height: 1; }
+        .stat-label { color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.8rem; font-weight: 500;}
+
+        /* --- Portfolio Section --- */
+        .section-title { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem; }
+        .section-desc { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 3rem; }
+
+        .controls { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+        
+        /* Mobile-Optimized Scrollable Filters */
+        .filters { 
+            display: flex; gap: 0.5rem; background: var(--bg-surface); padding: 0.4rem; 
+            border-radius: var(--radius-pill); border: 1px solid var(--border-subtle);
+            overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; /* Firefox */
+        }
+        .filters::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+        
         .filter-btn {
-            background: var(--glass-bg); border: 1px solid var(--border-color); color: var(--text-secondary);
-            padding: 0.7rem 1.5rem; border-radius: 50px; cursor: pointer; transition: 0.3s; font-weight: 600;
+            background: transparent; border: none; color: var(--text-secondary); 
+            padding: 0.6rem 1.2rem; border-radius: var(--radius-pill); white-space: nowrap;
+            cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: var(--transition);
         }
-        .filter-btn:hover, .filter-btn.active { background: var(--gradient-primary); color: #fff; border-color: transparent; }
+        .filter-btn:hover, .filter-btn:active { color: var(--text-primary); }
+        .filter-btn.active { background: var(--text-primary); color: var(--bg-base); }
 
-        #no-results { display: none; text-align: center; padding: 3rem; color: var(--text-secondary); font-size: 1.2rem; }
-
-        /* Premium 3D Cards */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; perspective: 1500px; }
-        
-        .card-spotlight { position: relative; border-radius: 24px; padding: 1px; background: var(--border-color); transition: transform 0.4s ease; transform-style: preserve-3d; }
-        .card-spotlight::before {
-            content: ""; position: absolute; inset: 0; border-radius: 24px; opacity: 0; transition: opacity 0.3s;
-            background: radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), var(--accent-glow), transparent 40%);
+        .search-box { position: relative; width: 100%; max-width: 300px; flex-shrink: 0; }
+        .search-box input {
+            width: 100%; padding: 0.8rem 1.2rem 0.8rem 2.8rem;
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            color: var(--text-primary); border-radius: var(--radius-pill); font-family: inherit; font-size: 0.95rem;
+            outline: none; transition: var(--transition);
         }
-        .card-spotlight:hover::before { opacity: 1; }
+        .search-box input:focus { border-color: var(--border-highlight); background: var(--bg-surface-hover); }
+        .search-box i { position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
 
-        .card {
-            background: var(--glass-card); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-radius: 23px; padding: 2rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;
-            position: relative; z-index: 1; overflow: hidden;
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.2rem; }
+
+        .project-card {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md); padding: 1.8rem;
+            display: flex; flex-direction: column; transition: var(--transition);
+            text-decoration: none; color: inherit; position: relative; overflow: hidden;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.03);
+        }
+        body.light-mode .project-card { box-shadow: inset 0 1px 1px rgba(255,255,255,0.8); }
+        
+        .project-card::after {
+            content: ''; position: absolute; inset: 0; border-radius: inherit;
+            box-shadow: inset 0 0 0 1px var(--border-glow); opacity: 0; transition: var(--transition); pointer-events: none;
         }
         
-        .card-content { transform: translateZ(30px); transition: transform 0.3s; display: flex; flex-direction: column; height: 100%; justify-content: space-between; pointer-events: none;}
-        .card-content * { pointer-events: auto; }
+        /* Desktop Hover vs Mobile Active */
+        @media (hover: hover) {
+            .project-card:hover { transform: translateY(-5px); background: var(--bg-surface-hover); }
+            .project-card:hover::after { opacity: 1; }
+            .project-card:hover .project-link-icon { opacity: 1; transform: translate(0, 0); color: var(--text-primary); }
+            .project-card:hover .tag { border-color: var(--border-highlight); color: var(--text-primary); }
+        }
+        .project-card:active { transform: scale(0.98); background: var(--bg-surface-hover); }
         
-        .card-icon { width: 55px; height: 55px; background: var(--icon-bg); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--accent-color); margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.05); }
-        .card h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.8rem; }
-        .card p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem; flex-grow: 1; }
+        .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+        .project-icon { 
+            width: 50px; height: 50px; border-radius: 14px; background: var(--bg-base);
+            border: 1px solid var(--border-subtle); display: grid; place-items: center;
+            font-size: 1.3rem; color: var(--text-primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .project-link-icon { 
+            color: var(--text-secondary); transition: var(--transition); 
+            opacity: 0; transform: translate(-10px, 10px); font-size: 1.1rem; 
+        }
         
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.8rem 1.5rem; background: var(--gradient-primary); color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 0.95rem; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .btn:hover { transform: scale(1.02); box-shadow: 0 10px 25px var(--accent-glow); }
-        .btn.disabled { background: var(--icon-bg); color: var(--text-secondary); box-shadow: none; border-style: dashed; cursor: not-allowed; }
-
-        .maintenance-badge { position: absolute; top: 15px; right: 15px; background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(239, 68, 68, 0.3); }
-
-        /* --- Contact Section --- */
-        .contact-box { text-align: center; padding: 4rem 2rem; margin: 0 auto; max-width: 600px; }
-        .contact-box h3 { font-size: 2rem; margin-bottom: 1rem; }
-        .contact-box p { color: var(--text-secondary); margin-bottom: 2rem; }
-        .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 1rem 2.5rem; background: var(--text-primary); color: var(--bg-color); font-weight: 800; font-size: 1.1rem; border-radius: 50px; text-decoration: none; transition: 0.3s; }
-        .contact-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(255,255,255,0.2); }
-
-        /* --- Footer & Floating Actions --- */
-        footer { text-align: center; padding: 3rem; border-top: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem; }
+        .project-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
+        .project-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; flex-grow: 1; }
         
-        .floating-refresh { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--glass-bg); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 1.4rem; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1000; transition: 0.3s; cursor: pointer; }
-        .floating-refresh:hover { background: var(--accent-color); color: white; border-color: var(--accent-color); transform: rotate(180deg); }
+        .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .tag { 
+            font-size: 0.7rem; font-weight: 700; padding: 0.3rem 0.7rem; 
+            background: var(--bg-base); border: 1px solid var(--border-subtle); 
+            border-radius: var(--radius-pill); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; transition: var(--transition);
+        }
 
-        /* --- Responsive --- */
+        .maintenance { 
+            position: absolute; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            opacity: 0; transition: var(--transition); font-weight: 700; font-size: 1.1rem; z-index: 10;
+        }
+        body.light-mode .maintenance { background: rgba(255, 255, 255, 0.85); }
+        .project-card.offline:hover .maintenance, .project-card.offline:active .maintenance { opacity: 1; }
+
+        #no-results { display: none; grid-column: 1 / -1; text-align: center; padding: 3rem 0; color: var(--text-secondary); font-size: 1rem; }
+
+        /* --- CTA & Footer --- */
+        .cta-section { text-align: center; padding: 6rem 0; position: relative; }
+        .cta-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 2rem; }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 0.8rem;
+            background: var(--text-primary); color: var(--bg-base);
+            padding: 1.1rem 2.2rem; border-radius: var(--radius-pill); font-weight: 700; font-size: 1.05rem;
+            text-decoration: none; transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+        }
+        body.light-mode .btn-primary { box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .btn-primary:hover, .btn-primary:active { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(255,255,255,0.2); }
+        body.light-mode .btn-primary:hover { box-shadow: 0 15px 40px rgba(0,0,0,0.25); }
+        
+        footer { text-align: center; padding: 2.5rem 0; color: var(--text-secondary); font-size: 0.9rem; border-top: 1px solid var(--border-subtle); }
+
+        /* =========================================
+           MOBILE OPTIMIZATIONS (The Magic Happens Here)
+           ========================================= */
         @media (max-width: 1024px) {
-            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-            .card-spotlight { transform-style: flat; transform: none !important; }
-            .card-content { transform: none !important; }
-            .card-spotlight::before { display: none; }
+            .bento-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+            .bento-main { grid-column: span 2; padding: 2rem; }
+            .bento-visual { grid-column: span 2; grid-row: span 1; padding: 3rem 0; }
+            .bento-stats { grid-column: span 1; padding: 2rem; }
         }
+        
         @media (max-width: 768px) {
-            .hero-title { font-size: 2.5rem; }
-            .hero-subtitle { font-size: 1.3rem; }
-            .stats-container { gap: 1.5rem; }
-            .stat-box { padding: 1rem; }
-            .section-title { font-size: 2rem; }
-            .floating-refresh { width: 50px; height: 50px; font-size: 1.1rem; bottom: 20px; right: 20px; }
-            .nav-controls { gap: 10px; }
+            .container { padding: 0 1rem; }
+            section { padding: 4rem 0; }
+            
+            /* Tighten Grid for Mobile */
+            .bento-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .bento-main, .bento-visual, .bento-stats { grid-column: span 1; }
+            
+            .hero-section { padding-top: 6rem; min-height: auto; }
+            .bento-card { padding: 1.5rem; border-radius: var(--radius-md); }
+            .bento-visual { padding: 2.5rem 0; } /* Keep logo card short on mobile */
+            
+            /* Make controls stack properly on small screens */
+            .controls { flex-direction: column; align-items: stretch; margin-bottom: 2rem; }
+            .filters { padding: 0.3rem; width: 100%; border-radius: 12px; }
+            .search-box { max-width: 100%; }
+            .search-box input { border-radius: 12px; }
+            
+            /* Always show link icon on touch devices */
+            .project-link-icon { opacity: 1; transform: translate(0,0); }
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <div class="loader-logo"></div>
-    </div>
-
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
-
-    <div id="canvas-container"></div>
+    <!-- Cinematic Grain Overlay -->
+    <div class="noise-overlay"></div>
+    <div class="ambient-glow"></div>
+    <div class="ambient-glow right"></div>
 
     <nav id="navbar">
         <div class="brand">
-            <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/A.S%20Main%20Logo.png" alt="A.S Logo" loading="lazy">
+            <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/A.S%20Main%20Logo.png" alt="A.S Logo">
             A.S World
         </div>
-        <div class="nav-controls">
-            <a href="https://github.com/aryansharma1171" target="_blank" class="nav-btn hover-target" aria-label="GitHub"><i class="fab fa-github"></i></a>
-            <button id="theme-toggle" class="nav-btn hover-target" aria-label="Toggle Theme"><i class="fas fa-sun"></i></button>
+        <div class="nav-links">
+            <a href="https://github.com/aryansharma1171" target="_blank" class="nav-btn" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <button id="theme-toggle" class="nav-btn" aria-label="Toggle Theme"><i class="fas fa-moon"></i></button>
         </div>
     </nav>
 
     <section class="hero-section container">
-        <img src="https://raw.githubusercontent.com/aryansharma1171/webimages/main/Etho%20ai%20logo.webp" alt="Etho AI" class="hero-logo-3d reveal">
-        <h1 class="hero-title reveal" style="transition-delay: 0.1s;">Aryan Sharma</h1>
-        <h2 class="hero-subtitle reveal" style="transition-delay: 0.2s;">
-            <span id="typed-text"></span><span class="typed-cursor">|</span>
-        </h2>
-        
-        <div class="stats-container reveal" style="transition-delay: 0.3s;">
-            <div class="stat-box glass-panel">
-                <div class="stat-num" data-target="15">0</div>
-                <div class="stat-label">Web Tools</div>
+        <div class="bento-grid">
+            
+            <!-- Main Intro Box -->
+            <div class="bento-card bento-main reveal">
+                <div class="status-badge">
+                    <span class="status-dot"></span> Developing the Future
+                </div>
+                <h1 class="hero-title">Aryan Sharma</h1>
+                <p class="hero-subtitle">Self-taught developer bridging the gap between flawless functionality and premium aesthetics. I build robust web utilities, AI interfaces, and custom software ecosystems.</p>
             </div>
-            <div class="stat-box glass-panel">
-                <div class="stat-num" data-target="50">0</div>
+
+            <!-- Visual Anchor (Etho AI Logo) -->
+            <div class="bento-card bento-visual reveal" style="transition-delay: 0.1s;">
+                <div class="bento-logo-glow"></div>
+            </div>
+
+            <!-- Stats Boxes -->
+            <div class="bento-card bento-stats reveal" style="transition-delay: 0.2s;">
+                <div class="stat-number" data-target="15">0</div>
+                <div class="stat-label">Web Tools Deployed</div>
+            </div>
+            <div class="bento-card bento-stats reveal" style="transition-delay: 0.3s;">
+                <div class="stat-number" data-target="50">0</div>
                 <div class="stat-label">Projects Built</div>
             </div>
-            <div class="stat-box glass-panel">
-                <div class="stat-num" data-target="100">0</div>
-                <div class="stat-label">% Passion</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="container">
-        <h2 class="section-title reveal">Engineer Inside Out</h2>
-        <div class="about-grid">
-            <div class="intro-card glass-panel reveal">
-                <p>Hello! I am <span>Aryan Sharma</span>, a passionate self-taught developer and the creator of A.S World.</p>
-                <p>I specialize in building intuitive, high-performance web applications, utilities, and custom AI interfaces designed to solve real-world problems. My goal is to make powerful software accessible to everyone for free.</p>
-                <p>Whether it's optimizing complex datasets or designing seamless mobile layouts, I bridge the gap between aesthetics and flawless functionality.</p>
-            </div>
-            <div class="skills-container reveal" style="transition-delay: 0.2s;">
-                <div class="skill-item">
-                    <div class="skill-info"><span>Frontend (HTML, CSS, JS)</span><span>95%</span></div>
-                    <div class="progress-bar"><div class="progress" data-width="95%"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>UI/UX Design</span><span>85%</span></div>
-                    <div class="progress-bar"><div class="progress" data-width="85%"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>AI Integration</span><span>90%</span></div>
-                    <div class="progress-bar"><div class="progress" data-width="90%"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>Backend/Databases (PHP, SQL)</span><span>80%</span></div>
-                    <div class="progress-bar"><div class="progress" data-width="80%"></div></div>
-                </div>
-            </div>
+            
         </div>
     </section>
 
     <section id="portfolio" class="container">
-        <h2 class="section-title reveal">Featured Innovations</h2>
-        
-        <div class="search-wrapper reveal">
-            <input type="text" id="app-search" class="search-input hover-target" placeholder="Search AI, Tools, Utilities..." autocomplete="off">
-            <i class="fas fa-search search-icon"></i>
+        <div class="reveal">
+            <h2 class="section-title">Ecosystem Hub</h2>
+            <p class="section-desc">Explore a curated collection of my latest utilities, AI architecture, and platforms.</p>
         </div>
 
-        <div class="category-filters reveal" id="category-filters">
-            <button class="filter-btn active hover-target" data-filter="all">All Ecosystem</button>
-            <button class="filter-btn hover-target" data-filter="ai">AI</button>
-            <button class="filter-btn hover-target" data-filter="education">Education</button>
-            <button class="filter-btn hover-target" data-filter="productivity">Productivity</button>
-            <button class="filter-btn hover-target" data-filter="utilities">Utilities</button>
-            <button class="filter-btn hover-target" data-filter="tools">Tools</button>
+        <div class="controls reveal" style="transition-delay: 0.1s;">
+            <!-- Scrollable Chips on Mobile -->
+            <div class="filters" id="category-filters">
+                <button class="filter-btn active" data-filter="all">All Systems</button>
+                <button class="filter-btn" data-filter="ai">AI Tech</button>
+                <button class="filter-btn" data-filter="utilities">Utilities</button>
+                <button class="filter-btn" data-filter="education">Education</button>
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="app-search" placeholder="Search architecture..." autocomplete="off">
+            </div>
         </div>
-        
-        <div id="no-results">No systems match your criteria. Redefine parameters.</div>
 
-        <div class="grid" id="portfolio-grid">
+        <div id="no-results">No projects match those parameters. Redefine your search.</div>
+
+        <div class="projects-grid" id="portfolio-grid">
             
-            <div class="card-spotlight reveal" data-category="ai">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-brain"></i></div>
-                            <h3>Arya AI</h3>
-                            <p>Experience the next generation of artificial intelligence designed by A.S.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/arya-ai/" target="_blank" class="btn hover-target">Launch AI <i class="fas fa-rocket"></i></a>
-                    </div>
+            <a href="https://aryansharma1171.github.io/arya-ai/" target="_blank" class="project-card reveal" data-category="ai">
+                <div class="project-header">
+                    <div class="project-icon"><i class="fas fa-brain"></i></div>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
                 </div>
-            </div>
+                <h3 class="project-title">Arya AI</h3>
+                <p class="project-desc">Next-generation artificial intelligence interface featuring custom identity logic and a mobile-optimized chat layout.</p>
+                <div class="project-tags"><span class="tag">AI</span><span class="tag">Web App</span></div>
+            </a>
 
-            <div class="card-spotlight reveal" data-category="education productivity tools">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
-                            <h3>Student Hub</h3>
-                            <p>A centralized platform tailored for students to access essential academic resources and tools.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/studenthub/" target="_blank" class="btn hover-target">Launch Hub <i class="fas fa-arrow-right"></i></a>
-                    </div>
+            <a href="https://aryansharma1171.github.io/studenthub/" target="_blank" class="project-card reveal" data-category="education">
+                <div class="project-header">
+                    <div class="project-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
                 </div>
-            </div>
+                <h3 class="project-title">Student Hub</h3>
+                <p class="project-desc">A centralized platform tailored for students to access essential academic resources and tools seamlessly.</p>
+                <div class="project-tags"><span class="tag">Education</span><span class="tag">Hub</span></div>
+            </a>
 
-            <div class="card-spotlight reveal" data-category="utilities productivity tools">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-file-excel"></i></div>
-                            <h3>Image to Excel</h3>
-                            <p>Convert images containing tables into editable Excel spreadsheets effortlessly.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/img-to-excel/" target="_blank" class="btn hover-target">Convert Image <i class="fas fa-table"></i></a>
-                    </div>
+            <a href="https://aryansharma1171.github.io/img-to-excel/" target="_blank" class="project-card reveal" data-category="utilities">
+                <div class="project-header">
+                    <div class="project-icon"><i class="fas fa-file-excel"></i></div>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
                 </div>
-            </div>
+                <h3 class="project-title">Image to Excel</h3>
+                <p class="project-desc">Intelligent utility to convert images containing structured data and tables into editable Excel spreadsheets.</p>
+                <div class="project-tags"><span class="tag">Utility</span><span class="tag">Data</span></div>
+            </a>
 
-            <div class="card-spotlight reveal" data-category="ai tools">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-robot"></i></div>
-                            <h3>Etho</h3>
-                            <p>Advanced Free AI software designed to assist with various tasks intelligently.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/Etho-by-A.S/" target="_blank" class="btn hover-target">Launch App <i class="fas fa-external-link-alt"></i></a>
-                    </div>
+            <a href="https://aryansharma1171.github.io/Etho-by-A.S/" target="_blank" class="project-card reveal" data-category="ai">
+                <div class="project-header">
+                    <div class="project-icon"><i class="fas fa-robot"></i></div>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
                 </div>
-            </div>
+                <h3 class="project-title">Etho AI</h3>
+                <p class="project-desc">Advanced free AI software designed to assist with intelligent task management and content generation.</p>
+                <div class="project-tags"><span class="tag">AI</span><span class="tag">Bot</span></div>
+            </a>
 
-            <div class="card-spotlight reveal" data-category="education">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-landmark"></i></div>
-                            <h3>Class 12 PolSci Test</h3>
-                            <p>Practice and test your knowledge for Class 12 Political Science exams.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/12-polsci-test-app/" target="_blank" class="btn hover-target">Take Test <i class="fas fa-arrow-right"></i></a>
-                    </div>
+            <a href="https://aryansharma1171.github.io/12-cs-test-app/" target="_blank" class="project-card reveal" data-category="education">
+                <div class="project-header">
+                    <div class="project-icon"><i class="fas fa-code-branch"></i></div>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
                 </div>
-            </div>
+                <h3 class="project-title">Class 12 CS Test</h3>
+                <p class="project-desc">Interactive testing environment for Class 12 Computer Science students covering SQL, Networking, and Python.</p>
+                <div class="project-tags"><span class="tag">Education</span><span class="tag">Quiz</span></div>
+            </a>
 
-            <div class="card-spotlight reveal" data-category="education">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-clipboard-question"></i></div>
-                            <h3>Class 12 CS Test</h3>
-                            <p>Practice and test your knowledge for Class 12 Computer Science exams.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/12-cs-test-app/" target="_blank" class="btn hover-target">Take Test <i class="fas fa-arrow-right"></i></a>
-                    </div>
+            <a href="https://aryansharma1171.github.io/imgtopdf/" target="_blank" class="project-card reveal" data-category="utilities">
+                <div class="project-header">
+                    <div class="project-icon"><i class="fas fa-file-pdf"></i></div>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
                 </div>
-            </div>
+                <h3 class="project-title">A.S Img to PDF</h3>
+                <p class="project-desc">Quickly convert image files into high-quality PDF documents. Optimized for seamless mobile browser usage.</p>
+                <div class="project-tags"><span class="tag">Utility</span><span class="tag">Converter</span></div>
+            </a>
 
-            <div class="card-spotlight reveal" data-category="utilities productivity tools">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-file-pdf"></i></div>
-                            <h3>Text to PDF</h3>
-                            <p>A simple utility to convert plain text into downloadable PDF documents.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/Text-to-pdf-by-a.s/" target="_blank" class="btn hover-target">Convert Now <i class="fas fa-arrow-right"></i></a>
-                    </div>
+            <a href="#" class="project-card offline reveal" data-category="utilities" tabindex="-1">
+                <div class="project-header">
+                    <div class="project-icon"><i class="fas fa-comments"></i></div>
                 </div>
-            </div>
+                <h3 class="project-title">A.S Chat World</h3>
+                <p class="project-desc">Custom-built chat software solution engineered for real-time, lightweight connection.</p>
+                <div class="project-tags"><span class="tag">Social</span></div>
+                <div class="maintenance"><i class="fas fa-wrench" style="margin-bottom: 5px;"></i> Offline for Maintenance</div>
+            </a>
 
-            <div class="card-spotlight reveal" data-category="tools">
-                <div class="card">
-                    <div class="maintenance-badge"><i class="fas fa-wrench"></i> Maintenance</div>
-                    <div class="card-content">
-                        <div style="opacity: 0.6;">
-                            <div class="card-icon"><i class="fas fa-comments"></i></div>
-                            <h3>A.S Chat World</h3>
-                            <p>Connect with others using this custom-built chat software solution. (Currently offline).</p>
-                        </div>
-                        <a href="#" class="btn disabled hover-target" tabindex="-1">Offline <i class="fas fa-ban"></i></a>
-                    </div>
+            <a href="https://aryansharma1171.github.io/etho-file-manager/" target="_blank" class="project-card reveal" data-category="utilities">
+                <div class="project-header">
+                    <div class="project-icon"><i class="fas fa-folder-open"></i></div>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
                 </div>
-            </div>
+                <h3 class="project-title">A.S File Manager</h3>
+                <p class="project-desc">Web-based file explorer to manage local files effectively with a clean, responsive UI.</p>
+                <div class="project-tags"><span class="tag">System</span><span class="tag">Utility</span></div>
+            </a>
 
-            <div class="card-spotlight reveal" data-category="tools education productivity">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
-                            <h3>A.S Code Editor</h3>
-                            <p>Write, edit, and test code directly in your browser with this online IDE.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/a.s-code-editor/" target="_blank" class="btn hover-target">Write Code <i class="fas fa-code"></i></a>
-                    </div>
+            <a href="https://aryansharma1171.github.io/a.s-code-editor/" target="_blank" class="project-card reveal" data-category="utilities education">
+                <div class="project-header">
+                    <div class="project-icon"><i class="fas fa-terminal"></i></div>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
                 </div>
-            </div>
-
-            <div class="card-spotlight reveal" data-category="utilities tools">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-qrcode"></i></div>
-                            <h3>A.S QR Scanner</h3>
-                            <p>Scan QR codes directly from your browser using your device camera.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/A.S-Q.R-Scanner/" target="_blank" class="btn hover-target">Scan QR <i class="fas fa-camera"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-spotlight reveal" data-category="utilities tools productivity">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-folder-open"></i></div>
-                            <h3>A.S File Manager</h3>
-                            <p>Manage your local files effectively with this web-based file explorer.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/etho-file-manager/" target="_blank" class="btn hover-target">Manage Files <i class="fas fa-folder"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-spotlight reveal" data-category="utilities tools">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-barcode"></i></div>
-                            <h3>Text to QR</h3>
-                            <p>Generate QR codes from text instantly.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/Text-to-QR-/" target="_blank" class="btn hover-target">Generate QR <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-spotlight reveal" data-category="productivity tools">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-wallet"></i></div>
-                            <h3>Expense Maker</h3>
-                            <p>Easily track and manage your daily expenses and finances with this intuitive tool.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/Expense-maker/" target="_blank" class="btn hover-target">Launch App <i class="fas fa-chart-line"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-spotlight reveal" data-category="utilities productivity tools">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-images"></i></div>
-                            <h3>Image to PDF</h3>
-                            <p>Quickly and easily convert your image files into high-quality PDF documents.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/imgtopdf/" target="_blank" class="btn hover-target">Convert Now <i class="fas fa-file-pdf"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-spotlight reveal" data-category="utilities tools">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-compress"></i></div>
-                            <h3>A.S File Resizer</h3>
-                            <p>Easily compress and resize your files to save space without losing quality.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/as-file-resizer/" target="_blank" class="btn hover-target">Open Resizer <i class="fas fa-compress-arrows-alt"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-spotlight reveal" data-category="productivity tools">
-                <div class="card">
-                    <div class="card-content">
-                        <div>
-                            <div class="card-icon"><i class="fas fa-file-medical"></i></div>
-                            <h3>Medicine Record Maker</h3>
-                            <p>Easily create, organize, and manage medical records with this dedicated tool.</p>
-                        </div>
-                        <a href="https://aryansharma1171.github.io/Medicine-record-Maker-/" target="_blank" class="btn hover-target">Open App <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
+                <h3 class="project-title">A.S Code Editor</h3>
+                <p class="project-desc">Write, edit, and test HTML/CSS/JS directly in your browser with this lightweight, mobile-friendly IDE.</p>
+                <div class="project-tags"><span class="tag">IDE</span><span class="tag">Tool</span></div>
+            </a>
 
         </div>
     </section>
 
-    <section id="contact" class="container reveal">
-        <div class="contact-box glass-panel">
-            <h3>Ready to Innovate?</h3>
-            <p>Let's build the future together. Whether you need a custom tool, AI integration, or have a project in mind, my inbox is open.</p>
-            <a href="mailto:etho98g@gmail.com" class="contact-btn hover-target">
-                <i class="fas fa-paper-plane"></i> Initialize Contact
-            </a>
-        </div>
+    <section class="cta-section container reveal">
+        <h2 class="cta-title">Ready to engineer the future?</h2>
+        <a href="mailto:etho98g@gmail.com" class="btn-primary">
+            Initialize Contact <i class="fas fa-arrow-right"></i>
+        </a>
     </section>
 
     <footer>
-        <p>© 2026 A.S Software Ecosystem. Engineered by Aryan Sharma.</p>
+        <div class="container">
+            <p>© 2026 A.S Software Ecosystem. Engineered by Aryan Sharma.</p>
+        </div>
     </footer>
 
-    <button id="refresh-btn" class="floating-refresh hover-target" aria-label="Refresh System">
-        <i class="fas fa-redo"></i>
-    </button>
-
     <script>
-        // --- 1. Loader ---
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            loader.style.opacity = '0';
-            setTimeout(() => loader.style.visibility = 'hidden', 800);
-        });
-
-        // --- 2. Theme Engine (Preserved) ---
+        // --- 1. Theme Engine ---
         const themeToggleBtn = document.getElementById('theme-toggle');
         const themeIcon = themeToggleBtn.querySelector('i');
-        const themeMeta = document.querySelector('meta[name="theme-color"]');
-
+        
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-mode');
-            themeIcon.classList.replace('fa-sun', 'fa-moon');
-            themeMeta.setAttribute('content', '#f8fafc');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
         }
 
         themeToggleBtn.addEventListener('click', () => {
             document.body.classList.toggle('light-mode');
             if (document.body.classList.contains('light-mode')) {
-                themeIcon.classList.replace('fa-sun', 'fa-moon');
-                localStorage.setItem('theme', 'light');
-                themeMeta.setAttribute('content', '#f8fafc');
-            } else {
                 themeIcon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
                 localStorage.setItem('theme', 'dark');
-                themeMeta.setAttribute('content', '#050505');
             }
         });
 
-        // --- 3. Custom Cursor (Fixed Mouse Visibility) ---
-        if (window.innerWidth >= 1024) {
-            /* Normal cursor is kept visible now */
-            const cursorDot = document.querySelector('.cursor-dot');
-            const cursorOutline = document.querySelector('.cursor-outline');
-            let mouseX = 0, mouseY = 0, outlineX = 0, outlineY = 0;
-
-            window.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX; mouseY = e.clientY;
-                cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
-            });
-
-            function animateCursor() {
-                outlineX += (mouseX - outlineX) * 0.15;
-                outlineY += (mouseY - outlineY) * 0.15;
-                cursorOutline.style.transform = `translate(${outlineX}px, ${outlineY}px)`;
-                requestAnimationFrame(animateCursor);
-            }
-            animateCursor();
-
-            document.querySelectorAll('.hover-target, a, button, input').forEach(el => {
-                el.addEventListener('mouseenter', () => cursorOutline.classList.add('hover'));
-                el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hover'));
-            });
-        }
-
-        // --- 4. Typing Animation ---
-        const typedTextSpan = document.getElementById("typed-text");
-        const textArray = ["Software Creator", "Web Developer", "AI Enthusiast"];
-        let textArrayIndex = 0; let charIndex = 0;
-
-        function type() {
-            if (charIndex < textArray[textArrayIndex].length) {
-                typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
-                charIndex++;
-                setTimeout(type, 100);
+        // --- 2. Smart Navbar (Hide on scroll down, show on scroll up) ---
+        let lastScrollY = window.scrollY;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                if (window.scrollY > lastScrollY) {
+                    navbar.classList.add('hidden'); // Scrolling down
+                } else {
+                    navbar.classList.remove('hidden'); // Scrolling up
+                }
             } else {
-                setTimeout(erase, 2000);
+                navbar.classList.remove('hidden'); // At the top
             }
-        }
-        function erase() {
-            if (charIndex > 0) {
-                typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
-                charIndex--;
-                setTimeout(erase, 50);
-            } else {
-                textArrayIndex++;
-                if (textArrayIndex >= textArray.length) textArrayIndex = 0;
-                setTimeout(type, 500);
-            }
-        }
-        document.addEventListener("DOMContentLoaded", () => setTimeout(type, 1500));
+            lastScrollY = window.scrollY;
+        });
 
-        // --- 5. Scroll Reveal & Counters & Progress Bars ---
-        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        // --- 3. Scroll Reveal & Counters ---
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -20px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
                     
-                    // Trigger counters
-                    const counters = entry.target.querySelectorAll('.stat-num');
+                    const counters = entry.target.querySelectorAll('.stat-number');
                     counters.forEach(counter => {
                         const target = +counter.getAttribute('data-target');
-                        const increment = target / 50;
+                        const increment = target / 30; 
                         let current = 0;
                         const updateCounter = () => {
                             current += increment;
@@ -681,160 +539,55 @@
                         };
                         if(counter.innerText === "0") updateCounter();
                     });
-
-                    // Trigger Progress bars
-                    const bars = entry.target.querySelectorAll('.progress');
-                    bars.forEach(bar => {
-                        bar.style.width = bar.getAttribute('data-width');
-                    });
+                    
+                    observer.unobserve(entry.target); 
                 }
             });
         }, observerOptions);
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // --- 6. Navbar Scroll Effect ---
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) nav.classList.add('scrolled');
-            else nav.classList.remove('scrolled');
-        });
-
-        // --- 7. Portfolio Search & Filter (Preserved) ---
+        // --- 4. Portfolio Search & Filter ---
         const searchInput = document.getElementById('app-search');
         const filterBtns = document.querySelectorAll('.filter-btn');
-        const cards = document.querySelectorAll('.card-spotlight');
+        const cards = document.querySelectorAll('.project-card');
         const noResultsMessage = document.getElementById('no-results');
 
-        function filterApplications() {
+        function filterProjects() {
             const query = searchInput.value.toLowerCase().trim();
             const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
             let found = 0;
 
-            cards.forEach(wrapper => {
-                const name = wrapper.querySelector('h3').textContent.toLowerCase();
-                const categories = wrapper.dataset.category;
+            cards.forEach(card => {
+                const title = card.querySelector('.project-title').textContent.toLowerCase();
+                const desc = card.querySelector('.project-desc').textContent.toLowerCase();
+                const categories = card.dataset.category || "";
                 
-                const matchesSearch = name.includes(query);
+                const matchesSearch = title.includes(query) || desc.includes(query);
                 const matchesFilter = activeFilter === 'all' || categories.includes(activeFilter);
 
                 if (matchesSearch && matchesFilter) {
-                    wrapper.style.display = 'block';
+                    card.style.display = 'flex';
+                    card.classList.remove('active');
+                    setTimeout(() => card.classList.add('active'), 10);
                     found++;
                 } else {
-                    wrapper.style.display = 'none';
+                    card.style.display = 'none';
                 }
             });
+            
             noResultsMessage.style.display = found === 0 ? 'block' : 'none';
-            window.dispatchEvent(new Event('scroll'));
         }
 
-        searchInput.addEventListener('input', filterApplications);
+        searchInput.addEventListener('input', filterProjects);
+        
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                filterApplications();
+                filterProjects();
             });
         });
-
-        // --- 8. Premium 3D Tilt Effect (Desktop) ---
-        if (window.innerWidth >= 1024) {
-            document.getElementById('portfolio-grid').addEventListener('mousemove', e => {
-                for(const card of cards) {
-                    const rect = card.getBoundingClientRect();
-                    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-                }
-            });
-
-            cards.forEach(card => {
-                card.addEventListener('mousemove', e => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2; const centerY = rect.height / 2;
-                    const rotateX = ((y - centerY) / centerY) * -10; 
-                    const rotateY = ((x - centerX) / centerX) * 10;
-                    
-                    card.style.transition = 'none';
-                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transition = 'transform 0.5s ease';
-                    card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-                });
-            });
-        }
-
-        // --- 9. Three.js Background ---
-        const canvasContainer = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        canvasContainer.appendChild(renderer.domElement);
-
-        const particleCount = window.innerWidth > 768 ? 2000 : 800;
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-
-        for(let i = 0; i < particleCount * 3; i++) {
-            positions[i] = (Math.random() - 0.5) * 20;
-        }
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-        const material = new THREE.PointsMaterial({
-            size: 0.03,
-            color: 0x06b6d4,
-            transparent: true,
-            opacity: 0.6,
-            blending: THREE.AdditiveBlending
-        });
-
-        const particles = new THREE.Points(geometry, material);
-        scene.add(particles);
-        camera.position.z = 5;
-
-        let targetRotationX = 0;
-        let targetRotationY = 0;
-
-        if (window.innerWidth >= 1024) {
-            document.addEventListener('mousemove', (e) => {
-                targetRotationX = (e.clientY / window.innerHeight - 0.5) * 0.5;
-                targetRotationY = (e.clientX / window.innerWidth - 0.5) * 0.5;
-            });
-        }
-
-        function animateThree() {
-            requestAnimationFrame(animateThree);
-            particles.rotation.y += 0.001;
-            particles.rotation.x += 0.0005;
-
-            particles.rotation.x += (targetRotationX - particles.rotation.x) * 0.05;
-            particles.rotation.y += (targetRotationY - particles.rotation.y) * 0.05;
-
-            const isLight = document.body.classList.contains('light-mode');
-            material.color.setHex(isLight ? 0x0284c7 : 0x06b6d4);
-
-            renderer.render(scene, camera);
-        }
-        animateThree();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // --- 10. Service Worker & Refresh (Preserved) ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(() => {});
-            });
-        }
-        document.getElementById('refresh-btn').addEventListener('click', () => window.location.reload());
     </script>
 </body>
 </html>
